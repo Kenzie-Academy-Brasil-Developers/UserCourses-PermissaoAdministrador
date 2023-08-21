@@ -41,4 +41,23 @@ const destroy = async (userId: string): Promise<void> => {
   await client.query('DELETE FROM "users" WHERE "id" = $1;', [userId]);
 };
 
-export default { create, read, partialUpdate, destroy };
+const getUserService = async (userId:string) =>{
+  const queryString:string =`
+  SELECT 
+  c.id "courseId",
+  c.name "courseName",
+  c.description  "courseDescription",
+  uc.active "userActiveInCourse",
+  u.id "userId",
+  u.name "userName"
+FROM courses c 
+JOIN "userCourses" uc ON c.id = uc."courseId" 
+JOIN  users u 
+WHERE u.id = $1;`
+// ON u.id = uc."userId" 
+const queryResult = await client.query(queryString,[ userId])
+
+   return queryResult.rows;
+}
+
+export default { create, read, partialUpdate, destroy,getUserService };

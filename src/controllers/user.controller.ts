@@ -33,4 +33,10 @@ const destroy = async (req: Request, res: Response): Promise<Response> => {
   return res.status(204).json();
 };
 
-export default { create, read, retrieve, partialUpdate, destroy };
+const listUser = async (req: Request, res: Response): Promise<Response> => {
+  const userList = await userServices.getUserService(req.params.userId)
+
+  return res.status(200).json(userList)
+}
+
+export default { create, read, retrieve, partialUpdate, destroy,listUser};

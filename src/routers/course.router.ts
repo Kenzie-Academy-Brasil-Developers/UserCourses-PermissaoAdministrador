@@ -19,7 +19,7 @@ coursesControllers.addCourse )
 
 courseRouter.delete("/:courseId/users/:userId",middlewares.validateToken,middlewares.validateAdmin,middlewares.validateCourseIdExists,coursesControllers.deleteCourseController)
 
-courseRouter.get("/:id/users",coursesControllers.listCourseDeveloper)
+courseRouter.get("/:courseId/users",middlewares.validateToken,middlewares.validateAdmin,coursesControllers.listCourseDeveloper)
 
 
 

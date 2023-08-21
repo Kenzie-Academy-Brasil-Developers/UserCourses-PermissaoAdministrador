@@ -14,9 +14,5 @@ app.use("/courses",courseRouter)
 app.use(middlewares.handleErrors);
 export default app
 
-//erros
-//--> get de users/:id/courses
-//--> get de courses/:id/users
-//--> teste failed
 
 

@@ -38,7 +38,8 @@ const deleteCourseService = async (courseId:string, userId:string):Promise<void>
 
 const getCourseService = async (userId:string) =>{
     const queryString:string =
-     `u.id "userId",
+     `SELECT
+     u.id "userId",
       u.name "userName",
       u.email "userEmail",
       c.id "courseId",

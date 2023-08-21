@@ -14,6 +14,6 @@ userRouter.get("/:userId",middlewares.validateAdmin,userControllers.retrieve)
 userRouter.patch("/:userId",middlewares.validateBody(userUpdateSchema),middlewares.validateEmailExists,userControllers.partialUpdate)
 userRouter.delete("/:userId",userControllers.destroy)
 
+userRouter.get("/:userId/courses",middlewares.validateToken,middlewares.validateAdmin,middlewares.validateCourseExists,userControllers.listUser)
 
-///users/:id/courses
 export default userRouter;
