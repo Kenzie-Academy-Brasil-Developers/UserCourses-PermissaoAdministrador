@@ -8,12 +8,15 @@ const validateCourseExists = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const { courseId } = req.params;
+  const { userId } = req.params;
 
-  const query: UserResult = await client.query(
-    'SELECT * FROM "courses" WHERE "id" = $1',
-    [courseId]
+  const queryString:string = `SELECT * FROM "courses" WHERE "id" = $1`
+
+  const query: UserResult = await client.query(queryString,[userId]    
+    
   );
+
+  
 
   if (query.rowCount === 0) {
     throw new AppError("No course found", 404);

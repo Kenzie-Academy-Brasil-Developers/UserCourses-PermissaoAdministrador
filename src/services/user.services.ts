@@ -3,6 +3,8 @@ import {User,UserCreate,UserRead,UserResult,UserReturn,UserUpdate,} from "../int
 import { client } from "../database";
 import { userCreateSchema, userReadSchema, userReturnSchema, userUpdateSchema } from "../schemas";
 import { hash } from "bcryptjs";
+import { NOTFOUND } from "dns";
+import { AppError } from "../errors";
 
 const create = async (payload: UserCreate): Promise<UserReturn> => {
 
@@ -53,10 +55,13 @@ const getUserService = async (userId:string) =>{
 FROM courses c 
 JOIN "userCourses" uc ON c.id = uc."courseId" 
 JOIN  users u 
+  ON u.id = uc."userId" 
 WHERE u.id = $1;`
-// ON u.id = uc."userId" 
-const queryResult = await client.query(queryString,[ userId])
 
+const queryResult = await client.query(queryString,[ userId])
+if(queryResult.rowCount === 0){
+  throw new AppError("No course found",404)
+}
    return queryResult.rows;
 }
 

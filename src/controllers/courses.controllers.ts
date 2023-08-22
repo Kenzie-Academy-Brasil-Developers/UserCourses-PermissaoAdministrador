@@ -7,12 +7,10 @@ const create = async (req: Request, res: Response): Promise<Response> => {
   return res.status(201).json(courses)
 };
 
-
 const read = async (req: Request, res: Response): Promise<Response> => {
   const course:courseRead = await coursesServices.read();
   return res.status(200).json(course);
 };
-
 
 const addCourse = async (req: Request, res: Response): Promise<Response> => {
   const userId:string = req.params.userId
@@ -28,9 +26,8 @@ const deleteCourseController = async (req: Request, res: Response): Promise<Resp
   return res.status(204).json();
 }
 
-
 const listCourseDeveloper = async (req: Request, res: Response): Promise<Response> => {
-  const userCourses = await coursesServices.getCourseService(req.params.id)
+  const userCourses = await coursesServices.getCourseService(req.params.courseId)
 
   return res.status(200).json(userCourses)
 

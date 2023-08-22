@@ -4,17 +4,28 @@ import { courseAdd, CourseCreate, courseRead, CourseResult, Courses } from "../i
 import { courseReadSchema } from "../schemas";
 
 const create = async (payload:CourseCreate): Promise<Array<Courses> > => {
-    const columns:string[] = Object.keys(payload[0])
-    const values:any[][] = payload.map((e) => Object.values(e))
-
-    const queryFormat:string= format(
-        'INSERT INTO "courses" (%I) VALUES %L RETURNING *;',
-        columns,
-        values
+    const columns = Array.from(
+        new Set(payload.flatMap((el) => Object.keys(el)))
     )
+
+        const values =payload.map((course) =>{
+            const newObj:any ={}
+
+            for(const column of columns){
+                newObj[column] = course[column as keyof Omit<Courses,"id">] || null
+            }
+            return Object.values(newObj)
+        })
+
+        const queryFormat:string= format(
+            'INSERT INTO "courses" (%I) VALUES %L RETURNING *',
+            columns,
+            values
+        );
     
     const query:CourseResult = await client.query(queryFormat)
     return query.rows
+    
 
 };
 
@@ -36,10 +47,10 @@ const deleteCourseService = async (courseId:string, userId:string):Promise<void>
     await client.query(queryString,[courseId, userId]);
 };
 
-const getCourseService = async (userId:string) =>{
+const getCourseService = async (courseId:string) =>{
     const queryString:string =
      `SELECT
-     u.id "userId",
+      u.id "userId",
       u.name "userName",
       u.email "userEmail",
       c.id "courseId",
@@ -48,10 +59,12 @@ const getCourseService = async (userId:string) =>{
     FROM users u 
     JOIN "userCourses" uc ON u.id = uc."userId" 
     JOIN  courses c
-      ON c.id = uc."courseId" 
-    WHERE u.id = $1;`
+        ON c.id = uc."courseId"
+    WHERE c.id = $1;`
 
-   const queryResult = await client.query(queryString,[ userId])
+   const queryResult = await client.query(queryString,[ courseId])
+
+
 
    return queryResult.rows;
 

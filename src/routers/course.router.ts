@@ -9,15 +9,19 @@ courseRouter.post("",middlewares.validateToken,
 middlewares.validateAdmin,middlewares.validateBody(courseCreateSchema),
 coursesControllers.create)
 
-
 courseRouter.get("",coursesControllers.read )
 
-courseRouter.post("/:courseId/users/:userId",middlewares.validateToken,middlewares.validateAdmin,
-middlewares.validateCourseIdExists
-,middlewares.validateIdExists,
+courseRouter.post("/:courseId/users/:userId",middlewares.validateToken,
+middlewares.validateAdmin,
+middlewares.validateCourseIdExists,
+middlewares.validateIdExists,
 coursesControllers.addCourse )
 
-courseRouter.delete("/:courseId/users/:userId",middlewares.validateToken,middlewares.validateAdmin,middlewares.validateCourseIdExists,coursesControllers.deleteCourseController)
+courseRouter.delete("/:courseId/users/:userId",middlewares.validateToken,
+middlewares.validateIdExists,
+middlewares.validateAdmin,
+middlewares.validateCourseIdExists,
+coursesControllers.deleteCourseController)
 
 courseRouter.get("/:courseId/users",middlewares.validateToken,middlewares.validateAdmin,coursesControllers.listCourseDeveloper)
 
